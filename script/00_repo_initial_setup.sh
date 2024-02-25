@@ -16,3 +16,6 @@ echo "Copied devops/mage/scripts/openssl.cnf.sample to devops/mage/scripts/opens
 echo "SQL Server config:"
 cp script/activedirectory/krb5.conf.sample script/activedirectory/krb5.conf
 echo "Copied script/activedirectory/krb5.conf.sample to script/activedirectory/krb5.conf"
+
+# Remove the existing mage project folder
+rm -rf my_de_project
