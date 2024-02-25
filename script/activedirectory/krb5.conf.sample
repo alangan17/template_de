@@ -1,0 +1,61 @@
+[libdefaults]
+	default_realm = DOMAIN.COM
+
+# The following krb5.conf variables are only for MIT Kerberos.
+	# kdc_timesync = 1
+	# ccache_type = 4
+	# forwardable = true
+	# proxiable = true
+
+# The following encryption type specification will be used by MIT Kerberos
+# if uncommented.  In general, the defaults in the MIT Kerberos code are
+# correct and overriding these specifications only serves to disable new
+# encryption types as they are added, creating interoperability problems.
+#
+# The only time when you might need to uncomment these lines and change
+# the enctypes is if you have local software that will break on ticket
+# caches containing ticket encryption types it doesn't know about (such as
+# old versions of Sun Java).
+
+#	default_tgs_enctypes = des3-hmac-sha1
+#	default_tkt_enctypes = des3-hmac-sha1
+#	permitted_enctypes = des3-hmac-sha1
+
+# The following libdefaults parameters are only for Heimdal Kerberos.
+	# fcc-mit-ticketflags = true
+
+# Run `cp /home/src/script/activedirectory/krb5.conf /etc/krb5.conf` to update this file after
+# Run `bash /home/src/script/activedirectory/login.sh` to update this file after
+	dns_lookup_realm = true  
+	dns_lookup_kdc = true
+	ticket_lifetime = 24h
+	# renew_lifetime = 7d
+	forwardable = true
+
+	# default_tgs_types = -rc4
+	# permitted_enc_types = -rc4
+	# default_tkt_enctypes = -rc4
+
+[realms]
+	domain1.com = {
+		kdc = kdc_server1.domain.com
+		default_domain = domain1.com
+	}
+	domain2.com = {
+		kdc = kdc_server1.domain2.com
+		kdc = kdc_server2.domain2.com
+		kdc = kdc_server2.domain2.com
+		default_domain = domain2.com
+	}
+
+
+
+[domain_realm]
+	domain1 = DOMAIN1
+	.domain1 = DOMAIN2
+    domain2 = SERVER2
+    .domain2 = SERVER2
+	domain1.com = DOMAIN1.COM
+	.domain1.com = DOMAIN1.COM
+	domain2.com = DOMAIN2.COM
+	.domain2.com = DOMAIN2.COM

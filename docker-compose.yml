@@ -1,0 +1,72 @@
+version: '3'
+services:
+  mage:
+    # Service for Data Transformation using shared MS SQL Server
+    # Container will not spin up unless `docker compose --profile t up` is used
+    build:
+      context: devops/mage
+      dockerfile: Dockerfile
+      args:
+        PIPENVFILE: requirements.txt
+    image: ${IMAGE_REGISTRY}/${IMAGE_REPO}/mage:latest
+    env_file:
+      - .env
+    volumes:
+      ## Mount docker host directory to the container (i.e. current directory)
+      - .:/home/src
+    ports:
+      - "127.0.0.1:6789-6799:6789" # mage
+      - "127.0.0.1:8082-8090:8080" # dbt docs
+    networks:
+      - magic-network
+    deploy:
+      resources:
+        limits:
+          memory: 1000M
+
+  minio:
+    ## Use `docker compose --profile storage up -d` to spin up this container
+    ## Local Object Storage
+    ## Ref: https://min.io/docs/minio/container/index.html
+    profiles:
+      - storage
+    image: quay.io/minio/minio
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_USER}
+    volumes:
+      - ./data:/data
+    networks:
+      - magic-network
+    deploy:
+      resources:
+        limits:
+          memory: 1000M
+    restart: on-failure:5
+    ## Python Usage:
+    ## Ref: https://github.com/minio/minio-py?tab=readme-ov-file#example---file-uploader
+
+    ## DuckDB Usage:
+    ## Ref: https://blog.min.io/duckdb-and-minio-for-a-modern-data-stack/
+    ## bash:
+    ## ```
+    ##   duckdb
+    ##   INSTALL httpfs;
+    ##   LOAD httpfs;
+    ##   SET s3_endpoint='minio:9000';
+    ##   SET s3_use_ssl=0;
+    ##   SET s3_access_key_id='<MINIO_ROOT_USER>';
+    ##   SET s3_secret_access_key='<MINIO_ROOT_PASSWORD>';
+
+    ##   CREATE TABLE cost_tbl AS SELECT * FROM read_csv_auto('s3://01-raw/cost-2023-11-01-2023-12-01.csv', all_varchar=1);
+    ##   CREATE TABLE cost_tbl AS SELECT * FROM read_csv_auto('http://minio:9000/01-raw/cost-2023-11-01-2023-12-01.csv', all_varchar=1);
+    ##   SELECT * FROM cost_tbl;
+    ## ```
+
+networks:
+  magic-network:
+    driver: bridge

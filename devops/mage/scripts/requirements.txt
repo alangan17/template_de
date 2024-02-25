@@ -1,0 +1,36 @@
+mage-ai==0.9.64
+
+## data transformation
+# dbt-core==1.4.5
+# dbt-sqlserver==1.7.2
+sqlfluff-templater-dbt==2.3.3
+
+# orchestration
+# prefect==2.14.3
+# prefect-shell==0.1.5
+
+# Microsoft Office 365
+# office365-rest-python-client==2.3.13
+
+## Object Storage
+## Azure Blob Storage
+# adlfs==2023.4.0
+## MinIO
+## https://github.com/minio/minio-py
+minio==7.2.4
+
+## manipulate excel files
+# openpyxl==3.0.10
+
+# polars==0.17.5
+# pandas==2.1.0
+# xlsx2csv==0.8.1
+
+# SFTP
+# pysftp==0.2.9
+
+# Web Scraping
+# selenium==4.15.1
+# beautifulsoup4==4.12.2
+# webdriver_manager==4.0.0
+# lxml
