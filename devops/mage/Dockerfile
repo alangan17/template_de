@@ -2,8 +2,8 @@ FROM mageai/mageai:0.9.64
 ## Available version: https://hub.docker.com/r/mageai/mageai/tags
 
 ## What is inside the image:
-## Comment out the following sections if you don't need them
 ## 1. Base image from Mage
+## Comment out the following sections if you don't need them
 ## 2. ODBC drivers for SQL Server
 ## 3. Kerberos Client for Windows Active Directory Authentication
 ## 4. DuckDB CLI
